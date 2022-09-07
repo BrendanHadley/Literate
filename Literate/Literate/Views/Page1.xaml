@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns:forms="http://xamarin.com/schemas/2014/forms/design" 
+    xmlns:xaml="http://xamarin.com/schemas/2014/forms"
+    x:Class="Literate.Views.Page1"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:CV="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions"
+             xmlns:FFImage="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:FFImageCache="clr-namespace:FFImageLoading.Cache;assembly=FFImageLoading"
+             xmlns:controls="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="CarouselViewStyle" TargetType="CV:CarouselViewControl">
+                <Setter Property="ShowIndicators" Value="True" />
+                <Setter Property="VerticalOptions" Value="FillAndExpand" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="AnimateTransition" Value="False" />
+            </Style>
+
+            <OnPlatform x:Key="cacheType" x:TypeArguments="FFImageCache:CacheType"
+                    iOS="All"
+                    Android="Memory"/>
+            <OnPlatform x:Key="downsampleWidth" x:TypeArguments="x:Double"
+                    iOS="576"
+                    Android="896"/>
+            <OnPlatform x:Key="imageHeight" x:TypeArguments="x:Double"
+                        iOS="275"
+                        Android="325"/>
+
+            <Style x:Key="CarouselViewPictureStyle" TargetType="FFImage:CachedImage">
+                <Setter Property="Source" Value="{Binding .}" />
+                <Setter Property="IsOpaque" Value="True" />
+                <Setter Property="InputTransparent" Value="False" />
+                <Setter Property="CacheType" Value="{StaticResource cacheType}" />
+                <Setter Property="Aspect" Value="AspectFill" />
+                <Setter Property="DownsampleWidth" Value="{StaticResource downsampleWidth}" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout>
+        <Button x:Name="SelectPhotos" Clicked="SelectPhotos_Clicked" Text="Select Images"/>
+        <Label x:Name="NoPhotos" Text=""/>
+
+
+        <!--<CarouselView x:Name="CV" EmptyView="Nothing to see..." ItemsSource="{Binding Monkeys}">
+            <CarouselView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" />
+            </CarouselView.ItemsLayout>
+            ...
+        </CarouselView>-->
+        
+        <!-- The CarouselView inside of a StackLayout. -->
+        <StackLayout >
+            <CV:CarouselViewControl x:Name="ImgCarouselView" Style="{StaticResource CarouselViewStyle}" HeightRequest="{StaticResource imageHeight}">
+                <CV:CarouselViewControl.ItemTemplate>
+                    <DataTemplate>
+                        <FFImage:CachedImage Style="{StaticResource CarouselViewPictureStyle}"/>
+                    </DataTemplate>
+                </CV:CarouselViewControl.ItemTemplate>
+            </CV:CarouselViewControl>
+        </StackLayout>
+
+
+    </StackLayout>
+</ContentPage>
